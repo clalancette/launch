@@ -3,6 +3,7 @@ import glob
 from setuptools import find_packages
 from setuptools import setup
 
+import fastentrypoints
 
 setup(
     name='launch_testing',
