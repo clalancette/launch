@@ -24,7 +24,7 @@ from typing import Tuple
 from typing import Type
 from typing import Union
 
-from pkg_resources import iter_entry_points
+import importlib_metadata
 
 from .entity import Entity
 from .expose import instantiate_action
@@ -37,7 +37,7 @@ from ..utilities import is_a
 
 interpolation_fuctions = {
     entry_point.name: entry_point.load()
-    for entry_point in iter_entry_points('launch.frontend.interpolate_substitution_method')
+    for entry_point in importlib_metadata.entry_points().get('launch.frontend.interpolate_substitution_method', [])
 }
 
 if False:
@@ -66,7 +66,7 @@ class Parser:
     def load_launch_extensions(cls):
         """Load launch extensions, in order to get all the exposed substitutions and actions."""
         if cls.extensions_loaded is False:
-            for entry_point in iter_entry_points('launch.frontend.launch_extension'):
+            for entry_point in importlib_metadata.entry_points().get('launch.frontend.launch_extension', []):
                 entry_point.load()
             cls.extensions_loaded = True
 
@@ -76,7 +76,7 @@ class Parser:
         if cls.frontend_parsers is None:
             cls.frontend_parsers = {
                 entry_point.name: entry_point.load()
-                for entry_point in iter_entry_points('launch.frontend.parser')
+                for entry_point in importlib_metadata.entry_points().get('launch.frontend.parser', [])
             }
 
     def parse_action(self, entity: Entity) -> (Action, Tuple[Any]):
